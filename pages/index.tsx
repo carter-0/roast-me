@@ -25,14 +25,38 @@ export default function Home() {
 
                         <div className={"sm:space-x-2 mt-5"}>
                             <div className="flex gap-4 items-center content-center sm:justify-center sm:gap-6">
-                                <button onClick={() => clerk.openSignUp()} className={"sm:w-auto w-full"}>
-                                    <button role="button" className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-transparent bg-orange-500 px-4 py-2 text-base font-semibold leading-6 text-white shadow-sm transition-all duration-150 hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 sm:w-auto">
-                                        <span className="block md:hidden">Start now</span> <span className="hidden md:block">Roast Me</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
-                                            <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd"></path>
-                                        </svg>
+                                <ClerkLoading>
+                                    <button role="button" onClick={() => clerk.openSignUp()} className={"sm:w-auto w-full"}>
+                                        <div className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-transparent bg-orange-500 px-4 py-2 text-base font-semibold leading-6 text-white shadow-sm transition-all duration-150 hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 sm:w-auto">
+                                            <span className="block md:hidden">Start now</span> <span className="hidden md:block">Roast Me</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
+                                                <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd"></path>
+                                            </svg>
+                                        </div>
                                     </button>
-                                </button>
+                                </ClerkLoading>
+
+                                <SignedOut>
+                                    <button role="button" onClick={() => clerk.openSignUp()} className={"sm:w-auto w-full"}>
+                                        <div className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-transparent bg-orange-500 px-4 py-2 text-base font-semibold leading-6 text-white shadow-sm transition-all duration-150 hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 sm:w-auto">
+                                            <span className="block md:hidden">Start now</span> <span className="hidden md:block">Roast Me</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
+                                                <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd"></path>
+                                            </svg>
+                                        </div>
+                                    </button>
+                                </SignedOut>
+
+                                <SignedIn>
+                                    <Link href={"/app"} className={"sm:w-auto w-full"}>
+                                        <div className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-transparent bg-orange-500 px-4 py-2 text-base font-semibold leading-6 text-white shadow-sm transition-all duration-150 hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 sm:w-auto">
+                                            <span className="block md:hidden">Start now</span> <span className="hidden md:block">Roast Me</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
+                                                <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd"></path>
+                                            </svg>
+                                        </div>
+                                    </Link>
+                                </SignedIn>
 
                                 <span className="text-sm font-bold uppercase tracking-wide text-gray-400 hidden sm:block">Or</span>
 
