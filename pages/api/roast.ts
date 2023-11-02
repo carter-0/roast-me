@@ -9,6 +9,7 @@ import {
 } from "@aws-sdk/client-s3";
 import {prisma} from "@/lib/db";
 import {Roast} from "@prisma/client";
+import Replicate from "replicate";
 
 const bucket = 'roast-me';
 
@@ -28,6 +29,9 @@ export const config = {
     },
 };
 
+const replicate = new Replicate({
+    auth: process.env.REPLICATE_API_TOKEN,
+});
 
 type Data = {
     success: boolean,
@@ -41,7 +45,6 @@ async function roast_post(req: NextApiRequest, res: NextApiResponse<Data>) {
     if (!userId) {
         return res.status(401).json({success: false, message: "Unauthorized"});
     }
-
 
 
     await new Promise(resolve => {
@@ -73,30 +76,61 @@ async function roast_post(req: NextApiRequest, res: NextApiResponse<Data>) {
     const command = new PutObjectCommand(params);
     await s3.send(command);
 
+    const output = await replicate.predictions.create({
+        version: "2facb4a474a0462c15041b78b1ad70952ea46b5ec6ad29583c0b29dbd4249591",
+        input: {
+            image: `https://roast-me.carter.red/${userId}/${id}.png`,
+            top_p: 0.7,
+            prompt: "Describe this image in detail.",
+            max_tokens: 1024,
+            temperature: 0.6
+        },
+        webhook: "https://8b08-82-0-130-13.ngrok-free.app/api/roast-webhook",
+        webhook_events_filter: ["completed"]
+    });
+
     const roast = await prisma.roast.create({
         data: {
             userId: userId,
             roastee: name,
-            key: `${userId}/${id}.png`
+            key: `${userId}/${id}.png`,
+            replicateId: output.id,
         }
     })
 
     return res.status(200).json({success: true, message: "Roast created", roast: roast});
 }
 
-function roast_get(req: NextApiRequest, res: NextApiResponse<Data>) {
+async function roast_get(req: NextApiRequest, res: NextApiResponse<Data>) {
+    const {userId} = getAuth(req);
+    const {roastId} = req.query;
 
+    if (!userId) {
+        return res.status(401).json({success: false, message: "Unauthorized"});
+    }
+
+    const roast = await prisma.roast.findFirst({
+        where: {
+            id: roastId as string,
+        }
+    })
+
+    if (!roast) {
+        return res.status(404).json({success: false, message: "Roast not found"});
+    }
+
+    return res.status(200).json({success: true, message: "Roast found", roast: roast});
 }
 
-export default function handler(
+export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<Data>
 ) {
     if (req.method === 'POST') {
         return roast_post(req, res)
     } else if (req.method === 'GET') {
-        return roast_get(req, res)
+        return await roast_get(req, res)
     }
 
-    res.status(400).json({ success: false })
+    res.status(400).json({success: false})
 }
