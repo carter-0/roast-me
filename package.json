@@ -11,6 +11,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.433.0",
     "@clerk/nextjs": "^4.26.2",
+    "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^1.0.6",
     "@prisma/client": "^5.5.0",
     "@stripe/stripe-js": "^2.1.11",

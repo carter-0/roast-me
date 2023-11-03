@@ -1,20 +1,31 @@
 import {GetServerSideProps} from "next";
 import {prisma} from "@/lib/db";
-import {Roast} from "@prisma/client";
+import {Roast, User} from "@prisma/client";
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
 import useSWR from "swr";
 import useFetch from "@/lib/useFetch";
+import PaymentPopup from "@/components/PaymentPopup";
+import { useState } from "react";
+import { useAuth, useClerk } from "@clerk/nextjs";
+import {getAuth} from "@clerk/nextjs/server";
+import { useRouter } from "next/router";
 
 type RoastOfProps = {
     name: string,
     id: string,
-    roast: Roast
+    roast: Roast,
+    user?: User
 }
 
 export default function RoastOf(props: RoastOfProps) {
-    const { name, id, roast } = props;
+    const { name, id, roast, user } = props;
+    
+    const router = useRouter();
+    const clerk = useClerk();
     const clerkFetch = useFetch();
+
+    const [paymentPopupOpen, setPaymentPopupOpen] = useState(false);
 
     const fetcher = async (url: string) => {
         const response = await clerkFetch(url);
@@ -23,7 +34,21 @@ export default function RoastOf(props: RoastOfProps) {
 
     const { data, error, isLoading } = useSWR(`/api/roast?roastId=${id}`, fetcher, {
         refreshInterval: 2000
-    })
+    });
+
+    const generateMore = () => {
+        if (!user) {
+            clerk.openSignUp({
+                redirectUrl: "/app"
+            });
+        } else {
+            if (user.premium) {
+                router.push("/app");
+            } else {
+                setPaymentPopupOpen(true);
+            }
+        }
+    }
 
     return (
         <>
@@ -31,7 +56,9 @@ export default function RoastOf(props: RoastOfProps) {
 
             <main>
                 <div className={"flex flex-col items-center mt-10 sm:mt-24"}>
-                    <h1 className={"text-3xl font-bold text-main-white mt-10 sm:mt-24"}>Roast of {name}</h1>
+                    <PaymentPopup open={paymentPopupOpen} setOpen={setPaymentPopupOpen} /> 
+
+                    <h1 className={"text-3xl font-bold text-main-white mt-10 sm:mt-24"}>Roast of {roast.roastee}</h1>
                     <Image src={`https://roast-me.carter.red/${roast.key}`} className={"object-cover w-96 h-96 rounded-md"} width={300} height={300} alt={`Image of ${name}`}/>
 
                     { data ? (
@@ -45,6 +72,12 @@ export default function RoastOf(props: RoastOfProps) {
                                         </div>
                                     )) }
                                 </div>
+
+                                <button onClick={() => {
+                                    generateMore()
+                                }}>
+                                    Generate More
+                                </button>
                             </>
                         ) : (
                             <>
@@ -69,6 +102,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         }
     }
 
+    const { userId } = getAuth(context.req);
     const { name, id } = context.params;
 
     const roast = await prisma.roast.findUnique({
@@ -77,11 +111,28 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         }
     })
 
-    return {
-        props: {
-            name: name,
-            id: id,
-            roast: JSON.parse(JSON.stringify(roast))
+    if (!userId) {
+        return {
+            props: {
+                name: name,
+                id: id,
+                roast: JSON.parse(JSON.stringify(roast))
+            }
+        }
+    } else {
+        const user = await prisma.user.findUnique({
+            where: {
+                userId: userId
+            }
+        });
+
+        return {
+            props: {
+                name: name,
+                id: id,
+                roast: JSON.parse(JSON.stringify(roast)),
+                user: JSON.parse(JSON.stringify(user))
+            }
         }
     }
 }
