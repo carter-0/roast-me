@@ -7,9 +7,10 @@ import useSWR from "swr";
 import useFetch from "@/lib/useFetch";
 import PaymentPopup from "@/components/PaymentPopup";
 import { useState } from "react";
-import { useAuth, useClerk } from "@clerk/nextjs";
+import { useClerk } from "@clerk/nextjs";
 import {getAuth} from "@clerk/nextjs/server";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 type RoastOfProps = {
     name: string,
@@ -52,6 +53,13 @@ export default function RoastOf(props: RoastOfProps) {
 
     return (
         <>
+            <Head>
+                <title>{`Roast of ${roast.roastee}`}</title>
+                <meta property="og:title" content={`Roast of ${roast.roastee}`} key="title" />
+                <meta property="og:image" content={`https://roast-me.carter.red/${roast.key}`} key="image" />
+                <meta property="description" content={`An AI roast of ${roast.roastee}.`} key="description" />
+            </Head>
+
             <Navbar />
 
             <main>
