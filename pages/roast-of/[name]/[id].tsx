@@ -34,7 +34,7 @@ export default function RoastOf(props: RoastOfProps) {
     }
 
     const { data, error, isLoading } = useSWR(`/api/roast?roastId=${id}`, fetcher, {
-        refreshInterval: 2000
+        refreshInterval: 1000
     });
 
     const generateMore = () => {

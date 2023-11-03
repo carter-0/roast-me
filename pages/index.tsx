@@ -19,8 +19,7 @@ export default function Home(props: HomeProps) {
     const { roasts, user } = props;
 
     const [paymentPopupOpen, setPaymentPopupOpen] = useState(false);
-
-    const clerk = useClerk()
+    const clerk = useClerk();
 
     return (
         <>

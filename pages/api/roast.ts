@@ -146,7 +146,7 @@ async function roast_get(req: NextApiRequest, res: NextApiResponse<Data>) {
         return res.status(404).json({success: false, message: "Roast not found"});
     }
 
-    return res.status(200).json({success: true, message: "Roast found", roast: roast});
+    return res.status(200).json({success: true, message: "Roast found", roast: JSON.parse(JSON.stringify(roast))});
 }
 
 export default async function handler(
