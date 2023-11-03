@@ -13,7 +13,9 @@ datasource db {
 model User {
   id        Int       @id @unique @default(autoincrement())
   createdAt DateTime? @default(now())
-  userId    String?
+  userId    String    @unique
+  stripeCustomerId String?
+  premium   Boolean   @default(false)
 }
 
 model Roast {

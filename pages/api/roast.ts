@@ -46,6 +46,33 @@ async function roast_post(req: NextApiRequest, res: NextApiResponse<Data>) {
         return res.status(401).json({success: false, message: "Unauthorized"});
     }
 
+    let user = await prisma.user.findUnique({
+        where: {
+            userId: userId
+        }
+    })
+
+    if (!user) {
+        user = await prisma.user.create({
+            data: {
+                userId: userId,
+                premium: false
+            }
+        })
+    }
+
+    const existing = await prisma.roast.findMany({
+        where: {
+            userId: userId
+        }
+    })
+
+    if (existing.length > 0 && !user.premium) {
+        return res.status(402).json({
+            success: false,
+            message: "You must be a premium user to create more roasts."
+        })
+    }
 
     await new Promise(resolve => {
         const mw = multer().any()
