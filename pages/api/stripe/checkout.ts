@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         submit_type: 'pay',
         line_items: [
             {
-                price: "price_1NNhH8Dujc1FjWRN783Ey2VA",
+                price: "price_1O9zB2H6wXsrIHOqqX6ghVp5",
                 quantity: 1,
             },
         ],

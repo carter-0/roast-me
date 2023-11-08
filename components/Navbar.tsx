@@ -9,7 +9,7 @@ export default function Navbar() {
                     <Link href={"/"}>
                         <div className={"flex items-center justify-center"}>
                             <Image className={"w-6 h-6 rounded-md mt-1"} src={"/assets/logo.png"} alt={"Logo"} width={40} height={40} priority={true} />
-                            <h1 className={"font-bold text-xl text-main-white ml-3"}>Roast Me</h1>
+                            <h1 className={"font-bold text-xl text-main-white mt-1.5 ml-3"}>Roast AI</h1>
                         </div>
                     </Link>
 

@@ -11,21 +11,24 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @unique @default(autoincrement())
-  createdAt DateTime? @default(now())
-  userId    String    @unique
+  id               Int       @id @unique @default(autoincrement())
+  createdAt        DateTime? @default(now())
+  userId           String    @unique
   stripeCustomerId String?
-  premium   Boolean   @default(false)
+  premium          Boolean   @default(false)
 }
 
 model Roast {
-  id          String    @id @unique @default(cuid())
-  createdAt   DateTime? @default(now())
-  userId      String?
-  roastee     String?
-  key         String?
-  replicateId String?
-  description String?   @db.VarChar(5000)
-  roasts      String?   @db.VarChar(5000)
-  completed   Boolean?  @default(false)
+  id                String    @id @unique @default(cuid())
+  createdAt         DateTime? @default(now())
+  userId            String?
+  roastee           String?
+  key               String?
+  replicateId       String?
+  misspelledName    String?   @db.VarChar(5000)
+  description       String?   @db.VarChar(5000)
+  roasts            String?   @db.VarChar(5000)
+  completedStageOne Boolean?  @default(false)
+  completedStageTwo Boolean?  @default(false)
+  completed         Boolean?  @default(false)
 }

@@ -112,7 +112,7 @@ async function roast_post(req: NextApiRequest, res: NextApiResponse<Data>) {
             max_tokens: 1024,
             temperature: 0.6
         },
-        webhook: "https://8b08-82-0-130-13.ngrok-free.app/api/roast-webhook",
+        webhook: "https://f9ea-82-0-130-13.ngrok-free.app/api/roast-webhook",
         webhook_events_filter: ["completed"]
     });
 
@@ -120,6 +120,7 @@ async function roast_post(req: NextApiRequest, res: NextApiResponse<Data>) {
         data: {
             userId: userId,
             roastee: name,
+            misspelledName: name.replaceAll(/[s]/gi, "z").replaceAll(/[a]/gi, "e").replaceAll(/[o]/gi, "a").replaceAll(/[i]/gi, "e").replaceAll(/[u]/gi, "e"),
             key: `${userId}/${id}.png`,
             replicateId: output.id,
         }
