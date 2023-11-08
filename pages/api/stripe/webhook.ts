@@ -36,6 +36,8 @@ const webhookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
             return
         }
 
+        console.log(event)
+
         switch (event.type) {
             case 'checkout.session.completed':
                 const session = event.data.object as Stripe.Checkout.Session;

@@ -21,7 +21,7 @@ export default function Navbar() {
                         {/*<Link href={"/demo"} className={"text-base font-semibold leading-6 text-gray-600 transition-all duration-150 hover:text-gray-900"}>Demo</Link>*/}
                     </div>
 
-                    <Link href={"/demo"} className={"text-base font-semibold leading-6 text-gray-600"}>
+                    <Link href={"/roast-of/carter/clops62g80001vm24f5opj2le"} className={"text-base font-semibold leading-6 text-gray-600"}>
                         Demo
                     </Link>
                 </div>

@@ -30,8 +30,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 quantity: 1,
             },
         ],
-        success_url: `https://example.com/success`,
-        cancel_url: `https://example.com`,
+        success_url: `https://roastai.app/?success=true`,
+        cancel_url: `https://roastai.app/`,
     };
 
     const checkoutSession: Stripe.Checkout.Session = await stripe.checkout.sessions.create(params);

@@ -13,6 +13,7 @@ import { useRouter } from "next/router";
 import Typewriter from 'typewriter-effect';
 import Head from "next/head";
 import {cn} from "@/lib/utils";
+import {toast} from "@/components/ui/use-toast";
 
 type RoastOfProps = {
     name: string,
@@ -27,6 +28,8 @@ export default function RoastOf(props: RoastOfProps) {
     const router = useRouter();
     const clerk = useClerk();
     const clerkFetch = useFetch();
+
+    const { noAnimations } = router.query;
 
     const [paymentPopupOpen, setPaymentPopupOpen] = useState(false);
 
@@ -57,6 +60,19 @@ export default function RoastOf(props: RoastOfProps) {
         }
     }
 
+    const share = async (withAnimations?: boolean) => {
+        if (withAnimations) {
+            await navigator.clipboard.writeText(`https://roastai.app/roast-of/${name}/${id}`);
+        } else {
+            await navigator.clipboard.writeText(`https://roastai.app/roast-of/${name}/${id}?noAnimations=true`);
+        }
+
+        toast({
+            title: "Copied to clipboard!",
+            description: "You can now paste the link anywhere you want.",
+        })
+    }
+
     return (
         <>
             <Head>
@@ -77,13 +93,13 @@ export default function RoastOf(props: RoastOfProps) {
             <main>
                 <PaymentPopup open={paymentPopupOpen} setOpen={setPaymentPopupOpen} />
 
-                <div className={"flex flex-col items-center mt-10 sm:mt-12"}>
-                    <div className={"flex flex-col items-center bg-white shadow rounded-xl max-w-xl w-full"}>
+                <div className={"flex flex-col mx-3 sm:mx-0 items-center mt-10 sm:mt-12"}>
+                    <div className={"flex mb-10 flex-col items-center bg-white shadow rounded-xl max-w-xl w-full"}>
                         <h1 className={"text-3xl mt-5 border-b border-gray-500 w-full text-center font-semibold text-main-white"}>Roast of {roast.roastee}</h1>
 
                         <div className={"mt-10 min-h-screen h-full w-full px-5"}>
                             <div>
-                                { completedStages.includes(1) ? (
+                                { completedStages.includes(1) || noAnimations ? (
                                     <h2 className={"text-lg text-main-white"}>{`> Hi, I'm an AI trained to roast people.`}</h2>
                                 ) : (
                                     <>
@@ -108,7 +124,7 @@ export default function RoastOf(props: RoastOfProps) {
                                     </>
                                 )}
 
-                                { completedStages.includes(2) ?  (
+                                { completedStages.includes(2) || noAnimations ?  (
                                     <>
                                         <h2 className={"text-lg text-main-white"}>{`> Loading today's roastee...`}</h2>
                                     </>
@@ -137,7 +153,7 @@ export default function RoastOf(props: RoastOfProps) {
                                     </>
                                 )}
 
-                                { completedStages.includes(3) ?  (
+                                { completedStages.includes(3) || noAnimations ?  (
                                     <>
                                         <div className={"flex flex-row"}>
                                             <h2 className={"mr-1"}>{`>`}</h2>
@@ -192,7 +208,7 @@ export default function RoastOf(props: RoastOfProps) {
                                     </>
                                 )}
 
-                                { completedStages.includes(4) ?  (
+                                { completedStages.includes(4) || noAnimations ?  (
                                     <>
                                         <h2 className={"text-lg text-main-white"}>{`> So this is `}<strong>{roast.roastee}</strong>{`, huh?`}</h2>
                                     </>
@@ -218,7 +234,7 @@ export default function RoastOf(props: RoastOfProps) {
                                     </>
                                 )}
 
-                                { completedStages.includes(4) && data.roast.completed ? (
+                                { (completedStages.includes(4) || noAnimations) && data?.roast.completed ? (
                                     <>
                                         <br />
 
@@ -281,6 +297,34 @@ export default function RoastOf(props: RoastOfProps) {
                                 )}
                             </div>
                         </div>
+                    </div>
+
+                    <div className={"flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 bg-white justify-start max-w-xl w-full p-5 rounded-md mb-10 shadow"}>
+                        {user?.userId == roast.userId ? (
+                            <>
+                                <button role="button" onClick={() => generateMore()} className={"sm:w-auto w-full"}>
+                                    <div className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-transparent bg-orange-500 px-4 py-2 text-sm font-medium leading-4 text-white shadow-sm transition-all duration-150 hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 sm:w-auto">
+                                        <span>Generate another Roast</span>
+                                    </div>
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <button role="button" onClick={() => generateMore()} className={"sm:w-auto w-full"}>
+                                    <div className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-transparent bg-orange-500 px-4 py-2 text-sm font-medium leading-4 text-white shadow-sm transition-all duration-150 hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 sm:w-auto">
+                                        <span>Create a Roast</span>
+                                    </div>
+                                </button>
+                            </>
+                        )}
+
+                        <button onClick={() => share(true)} type="button" className="rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                            Share with animations
+                        </button>
+
+                        <button onClick={() => share(false)} type="button" className="rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                            Share without animations
+                        </button>
                     </div>
                 </div>
             </main>

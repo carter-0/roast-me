@@ -61,26 +61,56 @@ const webhookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         //     }
         // });
 
-        const chatCompletion = await openai.chat.completions.create({
-            messages: [
-                { role: 'system', content: 'You are ChatGPT, a large language model trained by OpenAI. Follow the user\'s instructions carefully. Respond using markdown.' },
-                { role: 'user', content: `Can you roast the person in the described image:\n\n${description}` },
-            ],
-            model: 'gpt-4',
-            temperature: 0.7
-        })
+        let chatCompletion;
+
+        try {
+            chatCompletion = await openai.chat.completions.create({
+                messages: [
+                    { role: 'system', content: 'You are ChatGPT, a large language model trained by OpenAI. Follow the user\'s instructions carefully. Respond using markdown.' },
+                    { role: 'user', content: `Can you roast the person in the described image:\n\n${description}` },
+                ],
+                model: 'gpt-4',
+                temperature: 0.7
+            });
+        } catch (e) {
+            console.log(e, "retrying");
+
+            chatCompletion = await openai.chat.completions.create({
+                messages: [
+                    { role: 'system', content: 'You are ChatGPT, a large language model trained by OpenAI. Follow the user\'s instructions carefully. Respond using markdown.' },
+                    { role: 'user', content: `Can you roast the person in the described image:\n\n${description}` },
+                ],
+                model: 'gpt-4',
+                temperature: 0.7
+            });
+        }
 
         const response = chatCompletion.choices[0].message.content;
         console.log(response)
 
-        let finalChatCompletion = await openai.chat.completions.create({
-            messages: [
-                { role: 'system', content: 'You are ChatGPT, a large language model trained by OpenAI. Follow the user\'s instructions carefully. Respond using markdown.' },
-                { role: 'user', content: `Remove text unrelated to roasts, and convert these roasts into a JSON list like ["roast1", "roast2"]. You must respond in nothing but valid JSON.\n\n${response}` },
-            ],
-            model: 'gpt-4',
-            temperature: 0.2
-        });
+        let finalChatCompletion;
+
+        try {
+            finalChatCompletion = await openai.chat.completions.create({
+                messages: [
+                    { role: 'system', content: 'You are ChatGPT, a large language model trained by OpenAI. Follow the user\'s instructions carefully. Respond using markdown.' },
+                    { role: 'user', content: `Remove text unrelated to roasts, and convert these roasts into a JSON list like ["roast1", "roast2"]. You must respond in nothing but valid JSON.\n\n${response}` },
+                ],
+                model: 'gpt-4',
+                temperature: 0.2
+            });
+        } catch (e) {
+            console.log(e, "retrying");
+
+            finalChatCompletion = await openai.chat.completions.create({
+                messages: [
+                    { role: 'system', content: 'You are ChatGPT, a large language model trained by OpenAI. Follow the user\'s instructions carefully. Respond using markdown.' },
+                    { role: 'user', content: `Remove text unrelated to roasts, and convert these roasts into a JSON list like ["roast1", "roast2"]. You must respond in nothing but valid JSON.\n\n${response}` },
+                ],
+                model: 'gpt-4',
+                temperature: 0.2
+            });
+        }
 
         let finalResponse = finalChatCompletion.choices[0].message.content;
 

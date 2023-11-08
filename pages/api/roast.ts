@@ -112,7 +112,7 @@ async function roast_post(req: NextApiRequest, res: NextApiResponse<Data>) {
             max_tokens: 1024,
             temperature: 0.6
         },
-        webhook: "https://f9ea-82-0-130-13.ngrok-free.app/api/roast-webhook",
+        webhook: "https://8550-82-0-130-13.ngrok-free.app/api/roast-webhook",
         webhook_events_filter: ["completed"]
     });
 
@@ -132,10 +132,6 @@ async function roast_post(req: NextApiRequest, res: NextApiResponse<Data>) {
 async function roast_get(req: NextApiRequest, res: NextApiResponse<Data>) {
     const {userId} = getAuth(req);
     const {roastId} = req.query;
-
-    if (!userId) {
-        return res.status(401).json({success: false, message: "Unauthorized"});
-    }
 
     const roast = await prisma.roast.findFirst({
         where: {
