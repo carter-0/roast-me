@@ -30,7 +30,6 @@ export default function Footer() {
                 </div>
                 <div className="mt-8 md:mt-0 md:order-1 flex items-start flex-col">
                     <p className="text-center text-base text-gray-400"><Link href={"/terms-of-service"}>Terms of Service</Link></p>
-                    <p className="text-center text-base text-gray-400"><Link href={"/privacy-policy"}>Privacy Policy</Link></p>
                     <p className="text-center text-base text-gray-400"><Link href={"/blog"}>Blog</Link></p>
                     <p className="text-center text-base text-gray-400"><Link href={"https://support.trackify.am/about"}>How to generate AI Roasts</Link></p>
                 </div>
