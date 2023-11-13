@@ -112,7 +112,7 @@ async function roast_post(req: NextApiRequest, res: NextApiResponse<Data>) {
             max_tokens: 1024,
             temperature: 0.6
         },
-        webhook: "https://8550-82-0-130-13.ngrok-free.app/api/roast-webhook",
+        webhook: "https://roastai.app/api/roast-webhook",
         webhook_events_filter: ["completed"]
     });
 
