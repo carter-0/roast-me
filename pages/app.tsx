@@ -6,9 +6,11 @@ import {useState} from "react";
 import {cn, urlEncName} from "@/lib/utils";
 import {useRouter} from "next/router";
 import {Roast} from "@prisma/client";
+import useFetch from "@/lib/useFetch";
 
 export default function App() {
     const router = useRouter();
+    const cFetch = useFetch();
 
     const [images, setImages] = useState<ImageListType>([]);
     const [buttonActive, setButtonActive] = useState<boolean>(true);
@@ -49,7 +51,7 @@ export default function App() {
         formData.append("name", roastData.name);
         formData.append("file", images[0].file as Blob);
 
-        fetch('/api/roast', {
+        cFetch('/api/roast', {
             method: 'POST',
             body: formData,
         }).then((res) => {
