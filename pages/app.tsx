@@ -7,6 +7,7 @@ import {cn, urlEncName} from "@/lib/utils";
 import {useRouter} from "next/router";
 import {Roast} from "@prisma/client";
 import useFetch from "@/lib/useFetch";
+import PaymentPopup from "@/components/PaymentPopup";
 
 export default function App() {
     const router = useRouter();
@@ -15,6 +16,7 @@ export default function App() {
     const [images, setImages] = useState<ImageListType>([]);
     const [buttonActive, setButtonActive] = useState<boolean>(true);
     const [createButtonText, setCreateButtonText] = useState<string>('Roast Me 🔥');
+    const [openPaymentPopup, setOpenPaymentPopup] = useState<boolean>(false);
     const [roastData, setRoastData] = useState({
         name: ''
     })
@@ -56,14 +58,15 @@ export default function App() {
             body: formData,
         }).then((res) => {
             if (res.status === 200) {
-                res.json().then((data: { success: boolean, roast?: Roast }) => {
+                res.json().then((data: { success: boolean, roast?: Roast, message?: string }) => {
                     if (data.success && data.roast) {
                         setCreateButtonText('Roastee Uploaded!')
                         router.push(`/roast-of/${urlEncName(roastData.name)}/${data.roast.id}`)
-                    } else {
-                        setCreateButtonText('Roast Failed - Try Again')
                     }
                 })
+            } else if (res.status === 402) {
+                setCreateButtonText('Roast Failed - 0 Roasts Left')
+                setOpenPaymentPopup(true)
             } else {
                 setCreateButtonText('Roast Failed - Try Again')
             }
@@ -75,7 +78,7 @@ export default function App() {
             <Navbar />
 
             <Layout>
-
+                <PaymentPopup open={openPaymentPopup} setOpen={setOpenPaymentPopup} />
 
                 <main>
                     <div className={"flex flex-col items-center justify-center"}>
@@ -109,8 +112,6 @@ export default function App() {
                                     </div>
                                 </div>
                             </div>
-
-
 
                             <ImageUploading
                                 multiple

@@ -66,7 +66,7 @@ export default function Home(props: HomeProps) {
                                 </SignedOut>
 
                                 <SignedIn>
-                                    { (user && !user.premium && roasts > 0 ? (
+                                    { (user && (!user.premium && roasts > 0) ? (
                                         <>
                                             <button onClick={() => {
                                                 setPaymentPopupOpen(true);

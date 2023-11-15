@@ -1,5 +1,5 @@
 # Roast AI Terms of Service
-Last updated: 21st February 2023
+Last updated: 15th November 2023
 
 ## Acceptance of Terms
 
