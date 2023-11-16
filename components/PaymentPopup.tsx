@@ -94,17 +94,9 @@ export default function PaymentPopup(props: PaymentPopupProps) {
                                 </div>
                             </div>
                             <div className="flex flex-row gap-2 mt-5">
-                                <Link
-                                    className="mt-3 w-full flex-grow inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 dark:bg-secondary-black dark:border-gray-600 bg-white text-base font-medium dark:text-gray-300 text-gray-700 dark:hover:bg-gray-950 hover:bg-gray-50 sm:mt-0 sm:col-start-1 sm:text-sm"
-                                    href={"/billing/pricing"}
-                                    ref={cancelButtonRef}
-                                >
-                                    More Info
-                                </Link>
-
                                 <button
                                     type="button"
-                                    className="mt-3 min-w-[100px] inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 dark:bg-secondary-black dark:border-gray-600 bg-white text-base font-medium dark:text-gray-300 text-gray-700 dark:hover:bg-gray-950 hover:bg-gray-50 sm:mt-0 sm:col-start-1 sm:text-sm"
+                                    className="mt-3 w-full min-w-[100px] inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 dark:bg-secondary-black dark:border-gray-600 bg-white text-base font-medium dark:text-gray-300 text-gray-700 dark:hover:bg-gray-950 hover:bg-gray-50 sm:mt-0 sm:col-start-1 sm:text-sm"
                                     onClick={() => setOpen(false)}
                                     ref={cancelButtonRef}
                                 >
