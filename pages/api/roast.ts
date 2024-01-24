@@ -104,7 +104,7 @@ async function roast_post(req: NextApiRequest, res: NextApiResponse<Data>) {
     await s3.send(command);
 
     const output = await replicate.predictions.create({
-        version: "c293ca6d551ce5e74893ab153c61380f5bcbd80e02d49e08c582de184a8f6c83",
+        version: "e272157381e2a3bf12df3a8edd1f38d1dbd736bbb7437277c8b34175f8fce358",
         input: {
             image: `https://roast-me.carter.red/${userId}/${id}.png`,
             top_p: 0.7,
