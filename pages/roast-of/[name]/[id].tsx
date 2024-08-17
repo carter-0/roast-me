@@ -348,12 +348,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         }
     })
 
+    const parseJSON = (obj: any) => {
+        const str = JSON.stringify(obj);
+        const match = str.match(/\{.*\}/s);
+        return match ? JSON.parse(match[0]) : null;
+    };
+
     if (!userId) {
         return {
             props: {
                 name: name,
                 id: id,
-                roast: JSON.parse(JSON.stringify(roast))
+                roast: parseJSON(roast)
             }
         }
     } else {
@@ -367,8 +373,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             props: {
                 name: name,
                 id: id,
-                roast: JSON.parse(JSON.stringify(roast)),
-                user: JSON.parse(JSON.stringify(user))
+                roast: parseJSON(roast),
+                user: parseJSON(user)
             }
         }
     }
