@@ -73,6 +73,12 @@ export default function RoastOf(props: RoastOfProps) {
         })
     }
 
+    const parseJSON = (obj: any) => {
+        const str = JSON.stringify(obj);
+        const match = str.match(/\{.*\}/s);
+        return match ? JSON.parse(match[0]) : null;
+    };
+
     return (
         <>
             <Head>
@@ -239,7 +245,7 @@ export default function RoastOf(props: RoastOfProps) {
                                         <br />
 
                                         {
-                                            JSON.parse(data.roast.roasts.replace("\n", "")).map((roast: string, index: number) => (
+                                            parseJSON(data.roast.roasts.replace("\n", "")).map((roast: string, index: number) => (
                                                 <>
                                                     <h2 key={index} className={"text-lg text-main-white"}>{`> ${roast}`}</h2>
                                                     <br />
