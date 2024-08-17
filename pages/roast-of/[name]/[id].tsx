@@ -74,9 +74,21 @@ export default function RoastOf(props: RoastOfProps) {
     }
 
     const parseJSON = (obj: any) => {
-        const str = JSON.stringify(obj);
-        const match = str.match(/\{.*\}/s);
-        return match ? JSON.parse(match[0]) : null;
+        if (typeof obj !== 'string') return null;
+        try {
+            const str = obj.replaceAll("\n", "");
+            const jsonStart = str.indexOf('{') !== -1 ? str.indexOf('{') : str.indexOf('[');
+            if (jsonStart !== -1) {
+                let jsonStr = str.substring(jsonStart);
+                jsonStr = jsonStr.replace(/```/g, '');
+                if ((jsonStr.startsWith('{') && jsonStr.endsWith('}')) || (jsonStr.startsWith('[') && jsonStr.endsWith(']'))) {
+                    return JSON.parse(jsonStr);
+                }
+            }
+        } catch (error) {
+            console.error('Error parsing JSON:', error);
+        }
+        return null;
     };
 
     return (
@@ -244,14 +256,25 @@ export default function RoastOf(props: RoastOfProps) {
                                     <>
                                         <br />
 
-                                        {
-                                            parseJSON(data.roast.roasts.replace("\n", "")).map((roast: string, index: number) => (
-                                                <>
-                                                    <h2 key={index} className={"text-lg text-main-white"}>{`> ${roast}`}</h2>
-                                                    <br />
-                                                </>
-                                            ))
-                                        }
+                                        {(() => {
+                                            const parsedRoasts = parseJSON(data.roast.roasts);
+                                            if (Array.isArray(parsedRoasts)) {
+                                                return parsedRoasts.map((roast: string, index: number) => (
+                                                    <>
+                                                        <h2 className={"text-lg text-main-white"}>{`> ${roast}`}</h2>
+                                                        <br />
+                                                    </>
+                                                ));
+                                            } else if (typeof data.roast.roasts === 'string') {
+                                                return (
+                                                    <h2 className={"text-lg text-main-white"}>{`> ${data.roast.roasts}`}</h2>
+                                                );
+                                            } else {
+                                                return (
+                                                    <h2 className={"text-lg text-main-white"}>No roasts available.</h2>
+                                                );
+                                            }
+                                        })()}
                                     </>
                                 ) : (completedStages.includes(4) && !data.roast.completed) && (
                                     <>
